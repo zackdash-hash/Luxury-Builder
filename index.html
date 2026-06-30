@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MANSIÓN — Construcción & Diseño de Lujo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ── VARIABLES ─────────────────────────────────────────── */
+    :root {
+      --dark:       #0A0A0A;
+      --dark-2:     #111111;
+      --dark-3:     #1C1C1C;
+      --dark-4:     #272727;
+      --gold:       #C9A96E;
+      --gold-light: #E2C88A;
+      --gold-dark:  #9A7A4A;
+      --cream:      #F5F0E8;
+      --cream-2:    #EDE8DF;
+      --white:      #FFFFFF;
+      --gray:       #888888;
+      --gray-light: #BBBBBB;
+      --font-head:  'Playfair Display', serif;
+      --font-body:  'Inter', sans-serif;
+      --radius:     4px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a  { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* ── UTILITIES ─────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      line-height: 1.15;
+      color: inherit;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .gold-line {
+      width: 50px; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 20px 0 40px;
+    }
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-gold::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .btn-gold:hover::before { opacity: 1; }
+    .btn-gold span { position: relative; z-index: 1; }
+    .btn-gold i    { position: relative; z-index: 1; }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 30px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .btn-outline:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0;
+      opacity: 0;
+      transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    }
+    #header.floating {
+      top: 12px;
+    }
+
+    /* La tarjeta vive en header-inner, se ajusta exactamente al contenido */
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      border-radius: 0;
+      background: transparent;
+      border: 1px solid transparent;
+      box-shadow: none;
+      transition:
+        padding       0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        background    0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color  0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow    0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #header.floating .header-inner {
+      padding: 12px 28px;
+      border-radius: 16px;
+      background: rgba(8, 8, 8, 0.86);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(201, 169, 110, 0.13);
+      box-shadow: 0 12px 56px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .logo-text strong {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: var(--white);
+    }
+    .logo-text span {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 3.5px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* Nav */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 38px;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--gray-light);
+      position: relative;
+      transition: color var(--transition);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--white);
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+    .nav-cta {
+      padding: 10px 26px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--gold);
+      transition: var(--transition);
+    }
+
+    /* ── INTRO SCREEN ─────────────────────────────────────── */
+    #intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark);
+      pointer-events: none;
+    }
+    #intro-word {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 7.5vw, 8rem);
+      font-weight: 300;
+      font-style: normal;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      position: relative;
+      display: inline-block;
+    }
+    /* Typewriter chars */
+    .intro-char { display: inline-block; opacity: 0; }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 200vh;
+      z-index: 1;
+    }
+    .hero-inner {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      will-change: transform;
+    }
+    .hero-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.90) 36%, rgba(10,10,10,0.18) 65%, transparent 100%),
+        linear-gradient(to top,   rgba(10,10,10,0.70) 0%, transparent 42%);
+      z-index: 1;
+    }
+    .hero-inner > .container {
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 100%;
+      padding-left: 10vw;
+      padding-right: 5vw;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 500px;
+    }
+
+    /* ── Hero text staggered reveal ────────────────────────── */
+    @keyframes heroReveal {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.95);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--white);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+      text-shadow: 0 2px 32px rgba(0,0,0,1), 0 1px 8px rgba(0,0,0,1), 0 6px 48px rgba(0,0,0,0.9);
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+      text-shadow: 0 2px 32px rgba(0,0,0,1), 0 0 24px rgba(201,169,110,0.4);
+    }
+    .hero-desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--gray-light);
+      line-height: 1.75;
+      margin-bottom: 44px;
+      max-width: 460px;
+      opacity: 0;
+      animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+      text-shadow: 0 1px 16px rgba(0,0,0,1), 0 2px 28px rgba(0,0,0,0.95);
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards;
+    }
+    .hero-stats {
+      position: absolute;
+      bottom: 50px;
+      right: 60px;
+      z-index: 2;
+      display: flex;
+      gap: 40px;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat strong {
+      display: block;
+      font-family: var(--font-head);
+      font-size: 2.2rem;
+      color: var(--gold);
+      font-weight: 500;
+      line-height: 1;
+    }
+    .hero-stat span {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray-light);
+      margin-top: 6px;
+      display: block;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: scrollBounce 2s ease-in-out infinite;
+    }
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .hero-scroll i { color: var(--gold); font-size: 14px; }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── PROJECTS ──────────────────────────────────────────── */
+    #projects {
+      background: var(--cream);
+      color: var(--dark);
+      position: relative;
+      z-index: 2;
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -40px 100px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ── Scroll-driven project presentation ─────────── */
+    @keyframes projReveal {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .proj-scroll-space {
+      height: 700vh;
+      position: relative;
+    }
+    .proj-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .proj-slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 44% 56%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1);
+    }
+    .proj-slide.active  { opacity: 1; pointer-events: auto; }
+    .proj-slide.exiting { opacity: 0; transition-duration: 0.45s; }
+
+    /* Info panel */
+    .proj-info-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 60px 80px;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      gap: 0;
+    }
+    /* Decorative counter */
+    .proj-deco-num {
+      font-family: var(--font-head);
+      font-size: 9rem;
+      font-weight: 700;
+      color: rgba(201,169,110,0.08);
+      line-height: 1;
+      position: absolute;
+      bottom: 64px; right: 44px;
+      user-select: none;
+      letter-spacing: -6px;
+    }
+    /* Text starts hidden — revealed via JS scroll progress */
+    .proj-section-label, .proj-slide-name, .proj-slide-type, .proj-slide-details, .proj-slide-desc {
+      opacity: 0;
+      transform: translateY(22px);
+      will-change: opacity, transform;
+    }
+
+    .proj-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .proj-section-label::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .proj-slide-name {
+      font-family: var(--font-head);
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      font-weight: 500;
+      color: var(--dark);
+      line-height: 1.12;
+      margin-bottom: 10px;
+    }
+    .proj-slide-type {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .proj-slide-details {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid rgba(201,169,110,0.2);
+      margin-bottom: 0;
+    }
+    .proj-slide-detail {
+      flex: 1;
+      padding: 18px 0;
+      border-right: 1px solid rgba(201,169,110,0.15);
+      padding-right: 20px;
+      margin-right: 20px;
+    }
+    .proj-slide-detail:last-child {
+      border-right: none;
+      padding-right: 0; margin-right: 0;
+    }
+    .proj-slide-detail label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      display: block;
+      margin-bottom: 5px;
+    }
+    .proj-slide-detail span {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    .proj-slide-desc {
+      font-size: 13.5px;
+      color: var(--gray);
+      line-height: 1.75;
+      padding-top: 22px;
+      border-top: 1px solid rgba(201,169,110,0.2);
+      margin-top: 0;
+      max-width: 360px;
+    }
+
+    /* Shared UI: progress + hint */
+    .proj-shared-ui {
+      position: absolute;
+      bottom: 36px;
+      left: 60px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .proj-progress-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .proj-prog-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(154,122,74,0.22);
+      transition: all 0.45s cubic-bezier(0.4,0,0.2,1);
+      flex-shrink: 0;
+    }
+    .proj-prog-dot.active {
+      background: var(--gold);
+      width: 26px;
+      border-radius: 3px;
+    }
+    .proj-scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gray);
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    .proj-scroll-hint.hidden { opacity: 0; }
+    .proj-scroll-hint::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--gold-dark);
+      flex-shrink: 0;
+    }
+
+    /* Image panel */
+    .proj-img-panel {
+      position: relative;
+      overflow: hidden;
+    }
+    .proj-img-panel img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transform-origin: center center;
+      will-change: transform;
+    }
+    .proj-slide-badge {
+      position: absolute;
+      top: 24px; left: 24px;
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+    /* Experience banner — scroll-driven */
+    .exp-scroll-space { height: 220vh; position: relative; }
+    .exp-banner {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--dark-2);
+      color: var(--cream);
+      padding: 70px 0;
+      margin-top: 0;
+      overflow: hidden;
+    }
+    .tw-word { opacity: 0; transition: opacity 0.08s ease; display: inline; }
+    .tw-word.visible { opacity: 1; }
+    .exp-inner {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+    .exp-years {
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .exp-years strong {
+      font-family: var(--font-head);
+      font-size: 6rem;
+      color: var(--gold);
+      font-weight: 500;
+      line-height: 1;
+      display: block;
+    }
+    .exp-years span {
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+    .exp-divider {
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      flex-shrink: 0;
+    }
+    .exp-text { flex: 1; }
+    .exp-text p {
+      font-size: 15px;
+      color: var(--gray-light);
+      line-height: 1.8;
+      margin-top: 16px;
+    }
+    .exp-metrics {
+      display: flex;
+      gap: 48px;
+      margin-top: 32px;
+    }
+    .metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric strong {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .metric span {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    /* ── SERVICES ──────────────────────────────────────────── */
+    #services {
+      position: relative;
+      z-index: 2;
+      padding: 120px 0;
+      background: var(--dark);
+      overflow: hidden;
+    }
+    /* Imagen de fondo con overlay oscuro */
+    #services::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('Assets/seccion3.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      z-index: 0;
+    }
+    /* Overlay oscuro encima de la imagen */
+    #services::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.78);
+      z-index: 0;
+      pointer-events: none;
+    }
+    /* Cuando entra al viewport */
+    #services.bg-visible::before {
+      opacity: 1;
+    }
+    /* Todo el contenido encima del fondo */
+    #services .container {
+      position: relative;
+      z-index: 1;
+    }
+    .services-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .services-header .gold-line {
+      margin: 20px auto 0;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(201, 169, 110, 0.06);
+      border: 1px solid rgba(201, 169, 110, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    /* ── 3D Slider de servicios ────────────────────── */
+    .services-slider-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .services-3d-scene {
+      flex: 1;
+      perspective: 1400px;
+      perspective-origin: 50% 50%;
+      height: 530px;
+      position: relative;
+    }
+    .services-3d-track {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    /* Tarjeta: 25% más grande → 340→425, 380→475 */
+    .service-card {
+      position: absolute;
+      width: 425px;
+      left: 50%;
+      top: 50%;
+      margin-left: -212px;
+      margin-top: -237px;
+      height: 475px;
+      padding: 52px 44px;
+      background: rgba(14, 12, 10, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(201,169,110,0.18);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity   1.4s ease,
+                  box-shadow 0.6s ease;
+      will-change: transform, opacity;
+    }
+    /* Neon border: rotación continua sobre todas las tarjetas */
+    @keyframes neonSpin {
+      from { --neon-angle: 135deg; }
+      to   { --neon-angle: 495deg; }
+    }
+    @property --neon-angle {
+      syntax: '<angle>';
+      initial-value: 135deg;
+      inherits: false;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--neon-angle) at 50% 50%,
+        rgba(201,169,110,0)    0%,
+        rgba(255,215,120,0.9)  18%,
+        rgba(201,169,110,0)    36%,
+        rgba(201,169,110,0)   100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0.25;
+      animation: neonSpin 4s linear infinite;
+      transition: opacity 0.5s ease, filter 0.5s ease;
+      pointer-events: none;
+    }
+    .service-card.svc-active::after {
+      opacity: 1;
+      filter: drop-shadow(0 0 6px rgba(255,215,120,0.8));
+      animation-duration: 2.5s;
+    }
+    .service-card.svc-active {
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.55),
+        0 0 40px rgba(201,169,110,0.18),
+        0 0 90px rgba(201,169,110,0.07);
+    }
+    /* Barra lateral izquierda (decorativa) */
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      transition: height 0.5s ease;
+    }
+    .svc-active::before,
+    .service-card:hover::before { height: 100%; }
+
+    /* Botones del slider */
+    .svc-btn {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(201,169,110,0.35);
+      color: var(--gold);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10,10,10,0.6);
+      backdrop-filter: blur(8px);
+      flex-shrink: 0;
+      transition: transform 0.2s cubic-bezier(0.34,1.3,0.64,1),
+                  background 0.2s ease, border-color 0.2s ease;
+    }
+    .svc-btn:hover {
+      background: var(--gold);
+      color: var(--dark);
+      border-color: var(--gold);
+      transform: scale(1.1);
+      box-shadow: 0 0 24px rgba(201,169,110,0.35);
+    }
+    .svc-btn:active { transform: scale(0.93); }
+
+    /* Dots */
+    .svc-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 36px;
+    }
+    .svc-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(201,169,110,0.3);
+      border: none;
+      transition: all 0.3s ease;
+    }
+    .svc-dot.active {
+      background: var(--gold);
+      width: 24px;
+      border-radius: 4px;
+    }
+    .service-icon {
+      width: 64px; height: 64px;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      transition: var(--transition);
+    }
+    .service-card:hover .service-icon {
+      border-color: var(--gold);
+      background: rgba(201, 169, 110, 0.08);
+    }
+    .service-icon svg {
+      width: 28px; height: 28px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 1.5;
+    }
+    .service-card h3 {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+    .service-card p {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+    .service-num {
+      position: absolute;
+      top: 24px; right: 28px;
+      font-family: var(--font-head);
+      font-size: 3rem;
+      font-weight: 700;
+      color: rgba(201, 169, 110, 0.06);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ── TESTIMONIALS ──────────────────────────────────────── */
+    #testimonials { position: relative; z-index: 2; }
+    #testimonials {
+      padding: 120px 0;
+      background: var(--cream);
+      color: var(--dark);
+      overflow: hidden;
+    }
+    /* Imagen de fondo con overlay oscuro */
+    #testimonials::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('Assets/clientes.png') center center / contain no-repeat;
+      opacity: 0.22;
+      z-index: 0;
+    }
+    #testimonials .container,
+    #testimonials .testimonials-header,
+    #testimonials .marquee-outer { position: relative; z-index: 1; }
+    .testimonials-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .testimonials-header .gold-line { margin: 20px auto 0; }
+    .testimonials-track-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    /* Blur fade on edges */
+    .testimonials-track-wrap::before,
+    .testimonials-track-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 200px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .testimonials-track-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--cream), transparent);
+    }
+    .testimonials-track-wrap::after {
+      right: 0;
+      background: linear-gradient(to left,  var(--cream), transparent);
+    }
+    .testimonials-track {
+      display: flex;
+      gap: 28px;
+      width: max-content;
+      animation: marquee 38s linear infinite;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .testi-card {
+      width: 340px;
+      flex-shrink: 0;
+      background: var(--white);
+      border-radius: 8px;
+      padding: 36px 32px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.07);
+      position: relative;
+      border-top: 3px solid var(--gold);
+    }
+    .testi-quote {
+      font-size: 2.5rem;
+      color: var(--gold-light);
+      font-family: var(--font-head);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .testi-card p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.75;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testi-delivered {
+      font-size: 11px;
+      color: var(--gold-dark);
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      padding: 6px 12px;
+      background: rgba(201, 169, 110, 0.1);
+      display: inline-block;
+      border-radius: 2px;
+    }
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid var(--cream-2);
+      padding-top: 20px;
+    }
+    .testi-avatar {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-light);
+    }
+    .testi-author-info strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .testi-author-info span {
+      font-size: 12px;
+      color: var(--gray);
+    }
+    .testi-stars {
+      margin-top: 4px;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    #footer { position: relative; z-index: 2; }
+    #footer {
+      background: var(--dark-2);
+      color: var(--cream);
+    }
+    #footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('Assets/pro7.png') center 65% / cover no-repeat;
+      opacity: 0.18;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #footer > * { position: relative; z-index: 1; }
+    /* Luz sutil en el texto del footer */
+    #footer h3, #footer h4, #footer .footer-brand-name {
+      text-shadow: 0 0 28px rgba(201,169,110,0.35), 0 0 8px rgba(255,240,200,0.15);
+    }
+    #footer p, #footer a, #footer li, #footer span {
+      text-shadow: 0 1px 12px rgba(0,0,0,0.8), 0 0 20px rgba(201,169,110,0.12);
+    }
+    .footer-top {
+      padding: 100px 0 60px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 60px;
+      border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+    }
+    .footer-brand .logo { margin-bottom: 24px; }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.8;
+      margin-bottom: 28px;
+      max-width: 280px;
+    }
+    .social-links {
+      display: flex;
+      gap: 12px;
+    }
+    .social-link {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(201, 169, 110, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray);
+      font-size: 14px;
+      transition: var(--transition);
+    }
+    .social-link:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 169, 110, 0.08);
+    }
+    .footer-col h4 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 24px;
+      position: relative;
+      padding-bottom: 14px;
+    }
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+    .footer-col ul li a {
+      font-size: 14px;
+      color: var(--gray);
+      transition: color var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-col ul li a::before {
+      content: '›';
+      color: var(--gold);
+      font-size: 16px;
+    }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .contact-item i {
+      color: var(--gold);
+      font-size: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .contact-item span {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+    .footer-cta-wrap {
+      text-align: center;
+      padding: 60px 0;
+      border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+    }
+    .footer-cta-wrap h2 {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .footer-cta-wrap h2 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .footer-cta-wrap p {
+      font-size: 15px;
+      color: var(--gray);
+      margin-bottom: 32px;
+    }
+    .footer-bottom {
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-bottom p {
+      font-size: 13px;
+      color: var(--gray);
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-bottom-links a {
+      font-size: 13px;
+      color: var(--gray);
+      transition: color var(--transition);
+    }
+    .footer-bottom-links a:hover { color: var(--gold); }
+
+    /* ── SCROLL ANIMATIONS ─────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .nav-links { gap: 24px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .hero-stats { display: none; }
+      .exp-inner { gap: 40px; }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .carousel-wrapper { gap: 12px; }
+      .proj-btn { width: 42px; height: 42px; font-size: 13px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .exp-inner { flex-direction: column; gap: 30px; }
+      .exp-divider { display: none; }
+      .exp-metrics { flex-wrap: wrap; gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════ INTRO ═══════════════════ -->
+  <div id="intro-screen">
+    <span id="intro-word">Bienvenidos</span>
+  </div>
+
+  <!-- ═══════════════════ HEADER ═══════════════════ -->
+  <header id="header">
+    <div class="container">
+      <div class="header-inner">
+
+        <a href="#hero" class="logo">
+          <!-- Logo icon SVG -->
+          <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4 L36 14 L36 36 L4 36 L4 14 Z" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+            <path d="M4 14 L20 4 L36 14" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+            <rect x="14" y="22" width="12" height="14" stroke="#C9A96E" stroke-width="1.2" fill="none"/>
+            <path d="M16 8 L16 14 M20 6 L20 4 M24 8 L24 14" stroke="#E2C88A" stroke-width="0.8" opacity="0.6"/>
+          </svg>
+          <div class="logo-text">
+            <strong>MANSIÓN</strong>
+            <span>Built to Inspire</span>
+          </div>
+        </a>
+
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#hero"         class="active">Home</a></li>
+            <li><a href="#projects">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#footer">Contact</a></li>
+          </ul>
+        </nav>
+
+        <a href="#footer" class="nav-cta">Agendar Cita</a>
+        <button class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-video-wrap" style="opacity:0;">
+        <video autoplay muted loop playsinline>
+          <source src="Assets/hero_home.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="hero-overlay"></div>
+
+      <div class="container">
+        <div class="hero-content" style="opacity:0;transform:translateY(30px)">
+          <span class="hero-eyebrow">Arquitectura de Lujo</span>
+          <h1 class="hero-title">
+            Construimos espacios<br />
+            para cada <em>sueño</em>
+          </h1>
+          <p class="hero-desc">
+            Construcción y diseño arquitectónico lujoso que conecta con
+            la precisión y pasión del buen vivir. Cada proyecto, una obra de arte.
+          </p>
+          <div class="hero-actions">
+            <a href="#projects" class="btn-gold">
+              <span>Ver Proyectos</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#footer" class="btn-outline">Agendar Consulta</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>15+</strong>
+          <span>Años</span>
+        </div>
+        <div class="hero-stat">
+          <strong>200+</strong>
+          <span>Proyectos</span>
+        </div>
+        <div class="hero-stat">
+          <strong>98%</strong>
+          <span>Satisfacción</span>
+        </div>
+      </div>
+
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+    </div><!-- /hero-inner -->
+  </section>
+
+  <!-- ═══════════════════ PROJECTS ═══════════════════ -->
+  <section id="projects">
+    <!-- 700vh scroll space: 6 proyectos × 100vh cada uno -->
+    <div class="proj-scroll-space" id="projScrollSpace">
+      <div class="proj-sticky" id="projSticky">
+
+        <!-- Slide 1 -->
+        <div class="proj-slide active" data-slide="0">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">01</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Villa Cielo Azul</h2>
+            <p class="proj-slide-type">Luxury Villa · Residencial</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Luxury Villa</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>850 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$2.4M</span></div>
+            </div>
+            <p class="proj-slide-desc">Un santuario privado entre colinas donde cada espacio respira calma y elegancia. Materiales nobles, tecnología domótica integrada y jardines paisajísticos que fusionan arquitectura con naturaleza.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Residencial</span>
+            <img src="Assets/pro1.png" alt="Villa Cielo Azul" />
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="proj-slide" data-slide="1">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">02</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Torre Áurea Business</h2>
+            <p class="proj-slide-type">Office Tower · Comercial</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Office Tower</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>3.200 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$8.7M</span></div>
+            </div>
+            <p class="proj-slide-desc">Ícono corporativo de 22 pisos con fachada de vidrio templado, lobbies de doble altura y plantas flexibles certificadas LEED. Diseñado para empresas que lideran el mercado.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Comercial</span>
+            <img src="Assets/pro2.png" alt="Torre Áurea" style="object-position: right center;" />
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="proj-slide" data-slide="2">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">03</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Residencia del Bosque</h2>
+            <p class="proj-slide-type">Casa Premium · Residencial</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Casa Premium</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>620 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$1.8M</span></div>
+            </div>
+            <p class="proj-slide-desc">Integrada con su entorno natural, esta residencia emplea madera certificada, piedra local y ventanales panorámicos que invitan al bosque al interior. Sostenible por diseño, lujosa por vocación.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Residencial</span>
+            <img src="Assets/pro3.png" alt="Residencia del Bosque" style="object-position: right center;" />
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="proj-slide" data-slide="3">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">04</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Centro Empresarial Meridian</h2>
+            <p class="proj-slide-type">Corporate Hub · Comercial</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Corporate Hub</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>5.800 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$15.2M</span></div>
+            </div>
+            <p class="proj-slide-desc">Hub empresarial de vanguardia con espacios colaborativos, salas de conferencias de alto rendimiento y amenidades de bienestar. Un entorno pensado para la productividad y la excelencia.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Comercial</span>
+            <img src="Assets/pro%204.png" alt="Centro Meridian" style="object-position: right center;" />
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="proj-slide" data-slide="4">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">05</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Penthouse Cumbres</h2>
+            <p class="proj-slide-type">Penthouse · Residencial</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Penthouse</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>480 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$3.1M</span></div>
+            </div>
+            <p class="proj-slide-desc">La cima como obra de arte. Techos de doble altura, terraza privada con jacuzzi y vistas panorámicas a 360° sobre la ciudad. Cada detalle concebido para quienes no aceptan compromisos.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Residencial</span>
+            <img src="Assets/pro5.png" alt="Penthouse Cumbres" />
+          </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="proj-slide" data-slide="5">
+          <div class="proj-info-panel">
+            <span class="proj-deco-num">06</span>
+            <span class="proj-section-label">Proyectos Realizados</span>
+            <h2 class="proj-slide-name">Hotel Boutique Esmeralda</h2>
+            <p class="proj-slide-type">Boutique Hotel · Hostelería</p>
+            <div class="proj-slide-details">
+              <div class="proj-slide-detail"><label>Tipo</label><span>Boutique Hotel</span></div>
+              <div class="proj-slide-detail"><label>Lote</label><span>2.100 m²</span></div>
+              <div class="proj-slide-detail"><label>Inversión</label><span>$6.9M</span></div>
+            </div>
+            <p class="proj-slide-desc">32 suites donde el diseño editorial se encuentra con la hospitalidad de lujo. Gastronomía gourmet, spa de clase mundial y una identidad visual que convierte cada estancia en una experiencia memorable.</p>
+          </div>
+          <div class="proj-img-panel">
+            <span class="proj-slide-badge">Hostelería</span>
+            <img src="Assets/pro6.png" alt="Hotel Esmeralda" style="object-position: 65% center;" />
+          </div>
+        </div>
+
+        <!-- UI compartido: progreso + hint -->
+        <div class="proj-shared-ui">
+          <div class="proj-progress-dots" id="projDots">
+            <div class="proj-prog-dot active"></div>
+            <div class="proj-prog-dot"></div>
+            <div class="proj-prog-dot"></div>
+            <div class="proj-prog-dot"></div>
+            <div class="proj-prog-dot"></div>
+            <div class="proj-prog-dot"></div>
+          </div>
+          <div class="proj-scroll-hint" id="projHint">Desliza para ver más</div>
+        </div>
+
+      </div><!-- /proj-sticky -->
+    </div><!-- /proj-scroll-space -->
+
+    <!-- Experience Banner -->
+    <div id="expScrollSpace" class="exp-scroll-space">
+    <div class="exp-banner" id="expBanner">
+      <div class="container">
+        <div class="exp-inner">
+          <div class="exp-years">
+            <strong data-count="15" data-suffix="+">15+</strong>
+            <span>Años de<br>Experiencia</span>
+          </div>
+          <div class="exp-divider"></div>
+          <div class="exp-text">
+            <span class="section-label" id="expLabel">Construido en Confianza</span>
+            <h3 class="section-title" id="expTitle" style="font-size:1.9rem;">
+              Experiencia que <em>genera confianza</em>
+            </h3>
+            <p id="expDesc">
+              Durante más de 15 años, MANSIÓN ha entregado proyectos de construcción y diseño
+              excepcionales. Desde la concepción hasta la entrega, aportamos experiencia,
+              transparencia y artesanía en cada proyecto.
+            </p>
+            <div class="exp-metrics">
+              <div class="metric">
+                <strong data-count="200" data-suffix="+">200+</strong>
+                <span>Proyectos</span>
+              </div>
+              <div class="metric">
+                <strong data-count="98" data-suffix="%">98%</strong>
+                <span>Satisfacción</span>
+              </div>
+              <div class="metric">
+                <strong data-count="50" data-suffix="+">50+</strong>
+                <span>Especialistas</span>
+              </div>
+              <div class="metric">
+                <strong data-count="12" data-suffix="">12</strong>
+                <span>Premios</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /expScrollSpace -->
+
+  </section>
+
+  <!-- ═══════════════════ SERVICES ═══════════════════ -->
+  <section id="services">
+    <div class="container">
+      <div class="services-header fade-up">
+        <span class="section-label">Qué Hacemos</span>
+        <h2 class="section-title" style="color:var(--white)">Nuestros <em>Servicios</em></h2>
+        <div class="gold-line" style="margin:20px auto 0;"></div>
+      </div>
+
+      <!-- Slider 3D -->
+      <div class="services-slider-wrap">
+        <button class="svc-btn" id="svcPrev"><i class="fa-solid fa-chevron-left"></i></button>
+
+        <div class="services-3d-scene">
+          <div class="services-3d-track" id="svcTrack">
+
+            <div class="service-card">
+              <span class="service-num">01</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <h3>Consultoría</h3>
+              <p>Asesoramiento estratégico en cada fase del proyecto. Análisis de viabilidad, costos y planificación con expertos del sector.</p>
+            </div>
+
+            <div class="service-card">
+              <span class="service-num">02</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="7" y1="12" x2="17" y2="12"/></svg>
+              </div>
+              <h3>Diseño Arquitectónico</h3>
+              <p>Diseños innovadores que fusionan belleza y funcionalidad. Planos, renders 3D y seguimiento técnico en tiempo real.</p>
+            </div>
+
+            <div class="service-card">
+              <span class="service-num">03</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="15"/><polyline points="17 7 17 2 7 2 7 7"/><line x1="12" y1="12" x2="12" y2="22"/><line x1="2" y1="17" x2="22" y2="17"/></svg>
+              </div>
+              <h3>Construcción Comercial</h3>
+              <p>Espacios de alto rendimiento para empresas en crecimiento. Eficiencia, calidad y cumplimiento en cada entrega.</p>
+            </div>
+
+            <div class="service-card">
+              <span class="service-num">04</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              </div>
+              <h3>Diseño de Interiores</h3>
+              <p>Interiores funcionales y elegantes adaptados a tu visión. Materiales premium y acabados de primera clase.</p>
+            </div>
+
+            <div class="service-card">
+              <span class="service-num">05</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <h3>Renovación y Remodelado</h3>
+              <p>Transformamos espacios existentes con soluciones modernas y cuidado por cada detalle. Tu hogar, renovado.</p>
+            </div>
+
+            <div class="service-card">
+              <span class="service-num">06</span>
+              <div class="service-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+              </div>
+              <h3>Proyecto Personalizado</h3>
+              <p>Gestión integral de extremo a extremo, garantizando entrega puntual y dentro del presupuesto. Tu visión, nuestra misión.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <button class="svc-btn" id="svcNext"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+      <!-- Dots -->
+      <div class="svc-dots" id="svcDots">
+        <button class="svc-dot active" data-i="0"></button>
+        <button class="svc-dot" data-i="1"></button>
+        <button class="svc-dot" data-i="2"></button>
+        <button class="svc-dot" data-i="3"></button>
+        <button class="svc-dot" data-i="4"></button>
+        <button class="svc-dot" data-i="5"></button>
+      </div>
+
+    </div><!-- /container -->
+  </section>
+
+  <!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="testimonials-header fade-up">
+        <span class="section-label">Clientes Satisfechos</span>
+        <h2 class="section-title" style="color:var(--dark)">Lo que dicen <em>nuestros clientes</em></h2>
+        <div class="gold-line" style="margin:20px auto 0;"></div>
+      </div>
+    </div>
+
+    <div class="testimonials-track-wrap">
+      <div class="testimonials-track" id="testiTrack">
+
+        <!-- Card 1 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>El nivel de detalle y la calidad de los acabados superó todas nuestras expectativas. El equipo de MANSIÓN transformó nuestra visión en realidad con una precisión impecable.</p>
+          <span class="testi-delivered">Villa Residencial · 850 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=11" alt="Carlos Mendoza" />
+            <div class="testi-author-info">
+              <strong>Carlos Mendoza</strong>
+              <span>CEO · Grupo Inversión Premium</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Nuestra familia soñó con esta casa por años. MANSIÓN la construyó con un amor y profesionalismo que se siente en cada rincón. Un resultado extraordinario.</p>
+          <span class="testi-delivered">Casa Familiar Premium · 620 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=47" alt="Ana Restrepo" />
+            <div class="testi-author-info">
+              <strong>Ana Restrepo</strong>
+              <span>Empresaria · Sector Salud</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Como inversor, valoro la eficiencia y el retorno. MANSIÓN entregó el Centro Meridian antes del plazo y bajo presupuesto. Resultados que hablan por sí solos.</p>
+          <span class="testi-delivered">Torre Comercial · 5.800 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=57" alt="Diego Herrera" />
+            <div class="testi-author-info">
+              <strong>Diego Herrera</strong>
+              <span>Director · Herrera Capital</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>La reforma de nuestras oficinas fue una experiencia increíble. El diseño de interiores capturó perfectamente la identidad de nuestra marca. Totalmente recomendados.</p>
+          <span class="testi-delivered">Diseño de Interiores Corporativo</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=44" alt="María Vega" />
+            <div class="testi-author-info">
+              <strong>María Vega</strong>
+              <span>Directora Creativa · Vega & Co</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>El Hotel Boutique Esmeralda recibió premios de diseño apenas un año después de inaugurarse. Eso es mérito de la visión y ejecución impecable del equipo MANSIÓN.</p>
+          <span class="testi-delivered">Hotel Boutique · 2.100 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=52" alt="Roberto Castillo" />
+            <div class="testi-author-info">
+              <strong>Roberto Castillo</strong>
+              <span>Gerente · Castillo Hospitality</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Como arquitecta, soy muy exigente con los constructores. MANSIÓN respeta el proyecto original, propone mejoras inteligentes y entrega con una calidad fuera de serie.</p>
+          <span class="testi-delivered">Residencia de Autor · 480 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=41" alt="Valentina Torres" />
+            <div class="testi-author-info">
+              <strong>Valentina Torres</strong>
+              <span>Arquitecta Independiente</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duplicado para bucle infinito -->
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>El nivel de detalle y la calidad de los acabados superó todas nuestras expectativas. El equipo de MANSIÓN transformó nuestra visión en realidad con una precisión impecable.</p>
+          <span class="testi-delivered">Villa Residencial · 850 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=11" alt="Carlos Mendoza" />
+            <div class="testi-author-info">
+              <strong>Carlos Mendoza</strong>
+              <span>CEO · Grupo Inversión Premium</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Nuestra familia soñó con esta casa por años. MANSIÓN la construyó con un amor y profesionalismo que se siente en cada rincón. Un resultado extraordinario.</p>
+          <span class="testi-delivered">Casa Familiar Premium · 620 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=47" alt="Ana Restrepo" />
+            <div class="testi-author-info">
+              <strong>Ana Restrepo</strong>
+              <span>Empresaria · Sector Salud</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Como inversor, valoro la eficiencia y el retorno. MANSIÓN entregó el Centro Meridian antes del plazo y bajo presupuesto. Resultados que hablan por sí solos.</p>
+          <span class="testi-delivered">Torre Comercial · 5.800 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=57" alt="Diego Herrera" />
+            <div class="testi-author-info">
+              <strong>Diego Herrera</strong>
+              <span>Director · Herrera Capital</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>La reforma de nuestras oficinas fue una experiencia increíble. El diseño de interiores capturó perfectamente la identidad de nuestra marca. Totalmente recomendados.</p>
+          <span class="testi-delivered">Diseño de Interiores Corporativo</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=44" alt="María Vega" />
+            <div class="testi-author-info">
+              <strong>María Vega</strong>
+              <span>Directora Creativa · Vega & Co</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>El Hotel Boutique Esmeralda recibió premios de diseño apenas un año después de inaugurarse. Eso es mérito de la visión y ejecución impecable del equipo MANSIÓN.</p>
+          <span class="testi-delivered">Hotel Boutique · 2.100 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=52" alt="Roberto Castillo" />
+            <div class="testi-author-info">
+              <strong>Roberto Castillo</strong>
+              <span>Gerente · Castillo Hospitality</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-quote">"</div>
+          <p>Como arquitecta, soy muy exigente con los constructores. MANSIÓN respeta el proyecto original, propone mejoras inteligentes y entrega con una calidad fuera de serie.</p>
+          <span class="testi-delivered">Residencia de Autor · 480 m²</span>
+          <div class="testi-author">
+            <img class="testi-avatar" src="https://i.pravatar.cc/100?img=41" alt="Valentina Torres" />
+            <div class="testi-author-info">
+              <strong>Valentina Torres</strong>
+              <span>Arquitecta Independiente</span>
+              <div class="testi-stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /track -->
+    </div><!-- /wrap -->
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer id="footer">
+
+    <!-- CTA Banner -->
+    <div class="footer-cta-wrap">
+      <div class="container">
+        <h2>Hagamos algo <em>extraordinario</em></h2>
+        <p>¿Tienes un proyecto en mente? Hablemos y convirtamos tu visión en realidad.</p>
+        <a href="mailto:hola@mansion.com" class="btn-gold">
+          <span>Agendar una Cita</span>
+          <i class="fa-solid fa-calendar-check"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer columns -->
+    <div class="container">
+      <div class="footer-top">
+
+        <div class="footer-brand">
+          <a href="#hero" class="logo">
+            <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4 L36 14 L36 36 L4 36 L4 14 Z" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+              <path d="M4 14 L20 4 L36 14" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="14" y="22" width="12" height="14" stroke="#C9A96E" stroke-width="1.2" fill="none"/>
+            </svg>
+            <div class="logo-text">
+              <strong>MANSIÓN</strong>
+              <span>Built to Inspire</span>
+            </div>
+          </a>
+          <p>Construcción y diseño arquitectónico lujoso que conecta con la precisión y pasión del buen vivir.</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-pinterest-p"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="#hero">Inicio</a></li>
+            <li><a href="#projects">Sobre Nosotros</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="#testimonials">Clientes</a></li>
+            <li><a href="#footer">Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="#services">Consultoría</a></li>
+            <li><a href="#services">Diseño Arquitectónico</a></li>
+            <li><a href="#services">Construcción Comercial</a></li>
+            <li><a href="#services">Diseño de Interiores</a></li>
+            <li><a href="#services">Renovación</a></li>
+            <li><a href="#services">Proyecto Personalizado</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <div class="contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>+1 (555) 234-5678</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>hola@mansion.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Av. Gran Vía 123, Torre Norte<br/>Madrid, España 28001</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-regular fa-clock"></i>
+            <span>Lun – Vie: 9:00 – 18:00</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 MANSIÓN. Todos los derechos reservados.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Política de Privacidad</a>
+          <a href="#">Términos de Servicio</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+  <script>
+    // ── Siempre inicia desde arriba al refrescar ──────
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // ── Header float ─────────────────────────────────
+    const header = document.getElementById('header');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('floating', window.scrollY > window.innerHeight);
+    }, { passive: true });
+
+    // ── Active nav link on scroll ────────────────────
+    const sections = document.querySelectorAll('section[id], footer[id]');
+    const navLinks  = document.querySelectorAll('.nav-links a');
+    const observer  = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => {
+            a.classList.toggle('active',
+              a.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    sections.forEach(s => observer.observe(s));
+
+    // ── Fade-up on scroll ────────────────────────────
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          fadeObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    fadeEls.forEach(el => fadeObs.observe(el));
+
+    // ── Services: fondo + slider 3D ──────────────────
+    const servicesSection = document.getElementById('services');
+
+    // Fondo aparece con opacidad al entrar al viewport
+    const bgObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          servicesSection.classList.add('bg-visible');
+          bgObs.unobserve(servicesSection);
+        }
+      });
+    }, { threshold: 0.08 });
+    bgObs.observe(servicesSection);
+
+    // ── 3D Slider de servicios ────────────────────────
+    const svcCards  = Array.from(document.querySelectorAll('.service-card'));
+    const svcDots   = Array.from(document.querySelectorAll('.svc-dot'));
+    const svcPrev   = document.getElementById('svcPrev');
+    const svcNext   = document.getElementById('svcNext');
+    const SVC_TOTAL = svcCards.length;
+    let   svcActive = 0;
+    let   svcTimer  = null;
+
+    function renderSvc() {
+      svcCards.forEach((card, i) => {
+        let offset = i - svcActive;
+        if (offset >  SVC_TOTAL / 2) offset -= SVC_TOTAL;
+        if (offset < -SVC_TOTAL / 2) offset += SVC_TOTAL;
+
+        const abs = Math.abs(offset);
+        const ry  = offset * 28;
+        const tx  = offset * 280;
+        const tz  = -abs * 30;
+        const sc  = abs === 0 ? 1 : 0.86;
+        const op  = abs === 0 ? 1 : abs === 1 ? 0.82 : 0;
+        const zi  = 20 - abs;
+
+        card.style.transform     = `rotateY(${ry}deg) translateX(${tx}px) translateZ(${tz}px) scale(${sc})`;
+        card.style.opacity       = op;
+        card.style.zIndex        = zi;
+        card.style.pointerEvents = abs >= 2 ? 'none' : 'auto';
+        card.classList.toggle('svc-active', abs === 0);
+      });
+      svcDots.forEach((d, i) => d.classList.toggle('active', i === svcActive));
+    }
+
+    function svcGo(n) {
+      svcActive = ((n % SVC_TOTAL) + SVC_TOTAL) % SVC_TOTAL;
+      renderSvc();
+    }
+
+    function startAuto() {
+      clearInterval(svcTimer);
+      svcTimer = setInterval(() => {
+        svcActive = (svcActive + 1) % SVC_TOTAL;
+        renderSvc();
+      }, 5500);
+    }
+
+    function stopAuto() {
+      clearInterval(svcTimer);
+      svcTimer = null;
+    }
+
+    // Botones y dots — control manual mientras el mouse está encima
+    svcPrev.addEventListener('click', () => svcGo(svcActive - 1));
+    svcNext.addEventListener('click', () => svcGo(svcActive + 1));
+    svcDots.forEach(d => d.addEventListener('click', () => svcGo(+d.dataset.i)));
+    svcCards.forEach((c, i) => c.addEventListener('click', () => {
+      if (i !== svcActive) svcGo(i);
+    }));
+
+    // Pausa solo cuando hay movimiento real del mouse (no al hacer scroll encima)
+    const svcWrapper = document.querySelector('.services-slider-wrap');
+    let svcHovered = false;
+    svcWrapper.addEventListener('mousemove', () => {
+      if (!svcHovered) { svcHovered = true; stopAuto(); }
+    });
+    svcWrapper.addEventListener('mouseleave', () => {
+      svcHovered = false; startAuto();
+    });
+
+    renderSvc();
+    startAuto();
+
+    // ── Proyectos — scroll-driven presentation ────────
+    const projSpace  = document.getElementById('projScrollSpace');
+    const projSlides = Array.from(document.querySelectorAll('.proj-slide'));
+    const projDots   = Array.from(document.querySelectorAll('.proj-prog-dot'));
+    const projHint   = document.getElementById('projHint');
+    const PROJ_TOTAL = projSlides.length; // 6
+    let   projActive = 0;
+
+    const PROJ_TEXT_STEPS = [
+      { sel: '.proj-section-label', start: 0.04, dur: 0.14 },
+      { sel: '.proj-slide-name',    start: 0.16, dur: 0.16 },
+      { sel: '.proj-slide-type',    start: 0.28, dur: 0.14 },
+      { sel: '.proj-slide-details', start: 0.40, dur: 0.14 },
+      { sel: '.proj-slide-desc',    start: 0.52, dur: 0.16 },
+    ];
+
+    function resetProjText(slide) {
+      PROJ_TEXT_STEPS.forEach(({ sel }) => {
+        const el = slide.querySelector(sel);
+        if (!el) return;
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(22px)';
+      });
+      const img = slide.querySelector('.proj-img-panel img');
+      if (img) img.style.transform = 'scale(1)';
+    }
+
+    function animateProjText(slide, subProgress) {
+      PROJ_TEXT_STEPS.forEach(({ sel, start, dur }) => {
+        const el = slide.querySelector(sel);
+        if (!el) return;
+        const t = Math.min(Math.max((subProgress - start) / dur, 0), 1);
+        el.style.opacity = t;
+        el.style.transform = `translateY(${(1 - t) * 22}px)`;
+      });
+    }
+
+    function setProjectSlide(idx) {
+      if (idx === projActive) return;
+      const prev = projActive;
+      projActive = idx;
+
+      projSlides[prev].classList.add('exiting');
+      projSlides[prev].classList.remove('active');
+      resetProjText(projSlides[prev]);
+
+      projSlides[idx].classList.remove('exiting');
+      projSlides[idx].classList.add('active');
+
+      setTimeout(() => projSlides[prev].classList.remove('exiting'), 500);
+
+      projDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      projHint.classList.toggle('hidden', idx === PROJ_TOTAL - 1);
+    }
+
+    function updateProjectScroll() {
+      if (!projSpace) return;
+      const rect     = projSpace.getBoundingClientRect();
+      const vh       = window.innerHeight;
+      const traveled = -rect.top; // px scrolled into the space
+      const total    = projSpace.offsetHeight - vh; // 600vh in px
+      const progress = Math.min(Math.max(traveled / total, 0), 1);
+      const idx      = Math.min(PROJ_TOTAL - 1, Math.floor(progress * PROJ_TOTAL));
+      setProjectSlide(idx);
+
+      // Sub-progress within current slide (0→1) — drives text reveal + image zoom
+      const slideSize   = 1 / PROJ_TOTAL;
+      const subProgress = Math.min(Math.max((progress - idx * slideSize) / slideSize, 0), 1);
+      animateProjText(projSlides[idx], subProgress);
+
+      // Subtle zoom in toward center as slide progresses
+      const img = projSlides[idx].querySelector('.proj-img-panel img');
+      if (img) img.style.transform = `scale(${1 + subProgress * 0.06})`;
+    }
+
+    window.addEventListener('scroll', updateProjectScroll, { passive: true });
+    updateProjectScroll();
+
+    // ── Intro screen — scroll-driven ─────────────────────────
+    const introScreen   = document.getElementById('intro-screen');
+    const introWordEl   = document.getElementById('intro-word');
+    const heroVidWrap   = document.querySelector('.hero-video-wrap');
+    const heroContentEl = document.querySelector('.hero-content');
+
+    // Typewriter: split into spans, reveal via setTimeout (no CSS animation quirks)
+    const introText = introWordEl.textContent.trim();
+    introWordEl.textContent = '';
+    introText.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'intro-char';
+      span.textContent = ch;
+      introWordEl.appendChild(span);
+      setTimeout(() => { span.style.opacity = '1'; }, 300 + i * 135);
+    });
+
+    function updateIntro() {
+      const p = Math.min(window.scrollY / window.innerHeight, 1);
+
+      // Header: fades in as intro fades out
+      header.style.opacity = Math.min(p / 0.5, 1);
+
+      if (p >= 1) {
+        introScreen.style.display   = 'none';
+        heroVidWrap.style.opacity   = 1;
+        heroContentEl.style.opacity = 1;
+        heroContentEl.style.transform = 'translateY(0)';
+        return;
+      }
+
+      introScreen.style.display = 'flex';
+
+      // Intro: fade out + word floats up — gone at ~50% scroll
+      introScreen.style.opacity    = Math.max(1 - p * 2, 0);
+      introWordEl.style.transform  = `translateY(${-p * 100}px)`;
+
+      // Hero video: fade in over first 80% of scroll
+      heroVidWrap.style.opacity = Math.min(p / 0.8, 1);
+
+      // Hero content: appears from 35% → 90% scroll
+      const cp = Math.min(Math.max((p - 0.35) / 0.55, 0), 1);
+      heroContentEl.style.opacity   = cp;
+      heroContentEl.style.transform = `translateY(${(1 - cp) * 30}px)`;
+    }
+
+    window.addEventListener('scroll', updateIntro, { passive: true });
+    updateIntro();
+
+    // ── Experience banner — scroll-driven typewriter + counters ──
+    const expScrollSpace = document.getElementById('expScrollSpace');
+    const expBanner      = document.getElementById('expBanner');
+
+    function splitWords(el) {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+      const nodes = [];
+      let n;
+      while (n = walker.nextNode()) { if (n.textContent.trim()) nodes.push(n); }
+      nodes.forEach(tn => {
+        const parts = tn.textContent.split(/(\s+)/);
+        const frag  = document.createDocumentFragment();
+        parts.forEach(part => {
+          if (/\S/.test(part)) {
+            const s = document.createElement('span');
+            s.className = 'tw-word';
+            s.textContent = part;
+            frag.appendChild(s);
+          } else if (part) {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        tn.parentNode.replaceChild(frag, tn);
+      });
+    }
+
+    ['expLabel', 'expTitle', 'expDesc'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) splitWords(el);
+    });
+
+    const twWords  = Array.from(expBanner ? expBanner.querySelectorAll('.tw-word') : []);
+    const twTotal  = twWords.length;
+    const expNums  = Array.from(expBanner ? expBanner.querySelectorAll('[data-count]') : []);
+
+    function updateExpScroll() {
+      if (!expScrollSpace) return;
+      const rect     = expScrollSpace.getBoundingClientRect();
+      const total    = expScrollSpace.offsetHeight - window.innerHeight;
+      const progress = Math.min(Math.max(-rect.top / total, 0), 1);
+
+      // Phase 1 (0→65%): reveal words one by one
+      const wordPhase   = Math.min(progress / 0.65, 1);
+      const wordsToShow = Math.round(wordPhase * twTotal);
+      twWords.forEach((w, i) => w.classList.toggle('visible', i < wordsToShow));
+
+      // Phase 2 (65→95%): count numbers from 0 to target
+      const numProgress = Math.min(Math.max((progress - 0.65) / 0.30, 0), 1);
+      expNums.forEach(el => {
+        const target = +el.dataset.count;
+        const suffix = el.dataset.suffix || '';
+        el.textContent = Math.floor(numProgress * target) + suffix;
+      });
+    }
+
+    window.addEventListener('scroll', updateExpScroll, { passive: true });
+    updateExpScroll();
+
+    // ── Number counter for hero-stats (IntersectionObserver) ─────
+    function animateCount(el, target, suffix = '') {
+      let count = 0;
+      const step = Math.ceil(target / 60);
+      const timer = setInterval(() => {
+        count = Math.min(count + step, target);
+        el.textContent = count + suffix;
+        if (count >= target) clearInterval(timer);
+      }, 20);
+    }
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('[data-count]').forEach(n => {
+            animateCount(n, +n.dataset.count, n.dataset.suffix || '');
+          });
+          statsObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.hero-stats').forEach(s => statsObs.observe(s));
+
+    // ── Mobile menu (basic toggle) ───────────────────
+    const hamburger = document.querySelector('.hamburger');
+    hamburger.addEventListener('click', () => {
+      // Basic implementation — extend with a mobile drawer if needed
+      const nav = document.querySelector('.nav-links');
+      if (nav) nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+  </script>
+
+</body>
+</html>
