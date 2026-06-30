@@ -12,18 +12,18 @@
   <style>
     /* ── VARIABLES ─────────────────────────────────────────── */
     :root {
-      --dark:       #0A0A0A;
-      --dark-2:     #111111;
-      --dark-3:     #1C1C1C;
-      --dark-4:     #272727;
-      --gold:       #C9A96E;
-      --gold-light: #E2C88A;
-      --gold-dark:  #9A7A4A;
-      --cream:      #F5F0E8;
-      --cream-2:    #EDE8DF;
+      --dark:       #111111;
+      --dark-2:     #1A1A1A;
+      --dark-3:     #232323;
+      --dark-4:     #2D2D2D;
+      --gold:       #C8A96A;
+      --gold-light: #DCC089;
+      --gold-dark:  #A4824F;
+      --cream:      #F8F8F5;
+      --cream-2:    #EFEFEB;
       --white:      #FFFFFF;
-      --gray:       #888888;
-      --gray-light: #BBBBBB;
+      --gray:       #7A7A7A;
+      --gray-light: #A8A8A8;
       --font-head:  'Playfair Display', serif;
       --font-body:  'Inter', sans-serif;
       --radius:     4px;
@@ -40,6 +40,57 @@
       font-size: 16px;
       line-height: 1.6;
       overflow-x: hidden;
+      cursor: none;
+    }
+    a, button, [role="button"], .proj-slide, .service-card, input, textarea, select,
+    .hero-scroll, label {
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ─────────────────────────────────────── */
+    #cursor-dot {
+      position: fixed;
+      top: 0; left: 0;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, opacity 0.3s ease;
+      will-change: transform;
+    }
+    #cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.35);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                  height 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                  border-color 0.35s ease,
+                  opacity 0.3s ease;
+      will-change: transform;
+    }
+    /* Hover state */
+    body.cursor-hover #cursor-dot {
+      transform: translate(-50%, -50%) scale(2.5);
+      background: var(--gold);
+    }
+    body.cursor-hover #cursor-ring {
+      width: 56px; height: 56px;
+      border-color: rgba(201,169,110,0.5);
+    }
+    /* Click state */
+    body.cursor-click #cursor-dot {
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+    body.cursor-click #cursor-ring {
+      width: 28px; height: 28px;
+      border-color: rgba(201,169,110,0.8);
     }
     img { display: block; max-width: 100%; }
     a  { text-decoration: none; color: inherit; }
@@ -98,6 +149,46 @@
     .btn-gold:hover::before { opacity: 1; }
     .btn-gold span { position: relative; z-index: 1; }
     .btn-gold i    { position: relative; z-index: 1; }
+    .btn-luxury {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 44px;
+      background: transparent;
+      color: var(--gold-light);
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      border: 1px solid var(--gold-dark);
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      transition: color 0.5s ease, border-color 0.5s ease, letter-spacing 0.5s ease;
+    }
+    .btn-luxury::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      transform: scaleX(0);
+      transform-origin: left;
+      z-index: -1;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-luxury i {
+      font-size: 11px;
+      transition: transform 0.5s ease;
+    }
+    .btn-luxury:hover {
+      color: var(--dark);
+      border-color: var(--gold-light);
+      letter-spacing: 3.5px;
+    }
+    .btn-luxury:hover::before { transform: scaleX(1); }
+    .btn-luxury:hover i { transform: translateX(4px); }
     .btn-outline {
       display: inline-flex;
       align-items: center;
@@ -124,10 +215,29 @@
       z-index: 1000;
       padding: 0;
       opacity: 0;
-      transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+      transform: translateY(0);
+      transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.5s ease,
+                  transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #header.floating {
       top: 12px;
+    }
+    /* Oculto fuera de pantalla cuando scrolled past hero */
+    #header.header-hidden {
+      transform: translateY(-110%);
+    }
+    /* Reaparece con hover */
+    #header.header-peek {
+      transform: translateY(0);
+    }
+    /* Zona invisible de activación en la parte superior */
+    #header-trigger {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 32px;
+      z-index: 1001;
+      pointer-events: auto;
     }
 
     /* La tarjeta vive en header-inner, se ajusta exactamente al contenido */
@@ -135,7 +245,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 24px 0;
+      padding: 12px 0;
       border-radius: 0;
       background: transparent;
       border: 1px solid transparent;
@@ -148,8 +258,11 @@
         box-shadow    0.5s cubic-bezier(0.4, 0, 0.2, 1),
         backdrop-filter 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    #header .container {
+      max-width: 900px;
+    }
     #header.floating .header-inner {
-      padding: 12px 28px;
+      padding: 8px 22px;
       border-radius: 16px;
       background: rgba(8, 8, 8, 0.86);
       backdrop-filter: blur(28px);
@@ -167,23 +280,15 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
     }
-    .logo-icon {
-      width: 40px; height: 40px;
+    .logo-img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.3s ease;
     }
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1;
-    }
-    .logo-text strong {
-      font-family: var(--font-head);
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 3px;
-      color: var(--white);
-    }
+    .logo-img:hover { opacity: 0.85; }
     .logo-text span {
       font-size: 9px;
       font-weight: 400;
@@ -253,6 +358,27 @@
       transition: var(--transition);
     }
 
+    /* ── SECTION PROGRESS BAR ─────────────────────────────── */
+    #section-progress {
+      position: fixed;
+      bottom: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(to right, rgba(200,169,106,0.4), var(--gold-light), var(--gold));
+      z-index: 999;
+      transition: width 0.12s ease-out;
+      pointer-events: none;
+    }
+    #section-progress::after {
+      content: '';
+      position: absolute;
+      right: 0; top: -1px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: #FFE97A;
+      box-shadow: 0 0 6px 2px rgba(255,233,122,0.7);
+    }
+
     /* ── INTRO SCREEN ─────────────────────────────────────── */
     #intro-screen {
       position: fixed;
@@ -263,17 +389,53 @@
       justify-content: center;
       background: var(--dark);
       pointer-events: none;
+      overflow: hidden;
     }
+    #intro-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      z-index: 0;
+      animation: intro-bg-in 1.8s ease forwards 0.2s;
+    }
+    .intro-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(17,17,17,0.55), rgba(17,17,17,0.75) 60%, rgba(17,17,17,0.92));
+      z-index: 1;
+    }
+    @keyframes intro-bg-in {
+      from { opacity: 0; transform: scale(1.08); }
+      to   { opacity: 0.55; transform: scale(1); }
+    }
+    /* Cinematic bars */
+    #intro-screen::before,
+    #intro-screen::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 7vh;
+      background: #000;
+      z-index: 2;
+      transition: height 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    #intro-screen::before { top: 0; }
+    #intro-screen::after  { bottom: 0; }
+
     #intro-word {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(3rem, 7.5vw, 8rem);
       font-weight: 300;
-      font-style: normal;
-      color: var(--gold);
-      letter-spacing: 0.18em;
+      font-style: italic;
+      color: var(--gold-light);
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       white-space: nowrap;
       position: relative;
+      z-index: 3;
       display: inline-block;
     }
     /* Typewriter chars */
@@ -282,7 +444,7 @@
     /* ── HERO ──────────────────────────────────────────────── */
     #hero {
       position: relative;
-      height: 200vh;
+      height: 300vh;
       z-index: 1;
     }
     .hero-inner {
@@ -389,8 +551,21 @@
       bottom: 50px;
       right: 60px;
       z-index: 2;
+      background: rgba(200,210,220,0.07);
+      border: 1px solid rgba(200,215,230,0.14);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 28px 32px 22px;
       display: flex;
-      gap: 40px;
+      flex-direction: column;
+      gap: 0;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .hero-stats-numbers {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 18px;
     }
     .hero-stat {
       text-align: center;
@@ -398,19 +573,52 @@
     .hero-stat strong {
       display: block;
       font-family: var(--font-head);
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: var(--gold);
       font-weight: 500;
       line-height: 1;
     }
     .hero-stat span {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 400;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--gray-light);
       margin-top: 6px;
       display: block;
+    }
+    .hero-stats-footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(200,215,230,0.10);
+    }
+    .hero-avatars {
+      display: flex;
+    }
+    .hero-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(200,215,230,0.25);
+      background: rgba(180,195,210,0.18);
+      overflow: hidden;
+      margin-left: -8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      color: rgba(200,215,230,0.7);
+    }
+    .hero-avatars .hero-avatar:first-child { margin-left: 0; }
+    .hero-stats-label {
+      font-size: 11px;
+      color: var(--cream);
+      opacity: 0.75;
+      line-height: 1.35;
+    }
+    .hero-stats-label strong {
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 12px;
     }
     .hero-scroll {
       position: absolute;
@@ -488,7 +696,7 @@
       font-family: var(--font-head);
       font-size: 9rem;
       font-weight: 700;
-      color: rgba(201,169,110,0.08);
+      color: rgba(201,169,110,0.22);
       line-height: 1;
       position: absolute;
       bottom: 64px; right: 44px;
@@ -496,7 +704,7 @@
       letter-spacing: -6px;
     }
     /* Text starts hidden — revealed via JS scroll progress */
-    .proj-section-label, .proj-slide-name, .proj-slide-type, .proj-slide-details, .proj-slide-desc {
+    .proj-section-label, .proj-slide-name, .proj-slide-type, .proj-slide-details, .proj-slide-desc, .proj-slide-badge {
       opacity: 0;
       transform: translateY(22px);
       will-change: opacity, transform;
@@ -634,23 +842,25 @@
       will-change: transform;
     }
     .proj-slide-badge {
-      position: absolute;
-      top: 24px; left: 24px;
+      display: inline-block;
+      width: fit-content;
+      align-self: flex-start;
+      margin-top: 22px;
       background: var(--gold);
       color: var(--dark);
       font-size: 9px;
       font-weight: 700;
-      letter-spacing: 2.5px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 6px 14px;
+      padding: 5px 10px;
       border-radius: 2px;
-      z-index: 2;
     }
     /* Experience banner — scroll-driven */
     .exp-scroll-space { height: 220vh; position: relative; }
     .exp-banner {
       position: sticky;
       top: 0;
+      will-change: transform;
       height: 100vh;
       display: flex;
       align-items: center;
@@ -722,12 +932,19 @@
     }
 
     /* ── SERVICES ──────────────────────────────────────────── */
-    #services {
+    .services-scroll-space {
       position: relative;
+    }
+    #services {
+      position: sticky;
+      top: 0;
       z-index: 2;
+      min-height: 100vh;
       padding: 120px 0;
       background: var(--dark);
       overflow: hidden;
+      display: flex;
+      align-items: center;
     }
     /* Imagen de fondo con overlay oscuro */
     #services::before {
@@ -759,6 +976,7 @@
     #services .container {
       position: relative;
       z-index: 1;
+      width: 100%;
     }
     .services-header {
       text-align: center;
@@ -1114,7 +1332,17 @@
       gap: 60px;
       border-bottom: 1px solid rgba(201, 169, 110, 0.1);
     }
-    .footer-brand .logo { margin-bottom: 24px; }
+    .footer-brand .logo { display: flex; justify-content: center; }
+    .footer-brand { margin-top: -140px; }
+
+    /* Footer logo bounce-in */
+    @keyframes logo-scale-in {
+      0%   { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+    .footer-logo-anim.bounced {
+      animation: logo-scale-in 1.4s cubic-bezier(0.22,1,0.36,1) 0.3s both;
+    }
     .footer-brand p {
       font-size: 14px;
       color: var(--gray);
@@ -1214,11 +1442,16 @@
       margin-bottom: 32px;
     }
     .footer-bottom {
-      padding: 28px 0;
+      padding: 20px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 24px;
+      border-top: 1px solid rgba(201,169,110,0.1);
+      flex-wrap: nowrap;
     }
+    .footer-social { gap: 12px; }
+    .footer-social .social-link { width: 32px; height: 32px; font-size: 12px; }
     .footer-bottom p {
       font-size: 13px;
       color: var(--gray);
@@ -1238,7 +1471,7 @@
     .fade-up {
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1), transform 0.85s cubic-bezier(0.22,1,0.36,1);
     }
     .fade-up.visible {
       opacity: 1;
@@ -1269,8 +1502,15 @@
 </head>
 <body>
 
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div id="section-progress"></div>
+  <div id="header-trigger"></div>
+
   <!-- ═══════════════════ INTRO ═══════════════════ -->
   <div id="intro-screen">
+    <img id="intro-bg" src="Assets/pro8.png" alt="" />
+    <div class="intro-overlay"></div>
     <span id="intro-word">Bienvenidos</span>
   </div>
 
@@ -1280,26 +1520,16 @@
       <div class="header-inner">
 
         <a href="#hero" class="logo">
-          <!-- Logo icon SVG -->
-          <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 4 L36 14 L36 36 L4 36 L4 14 Z" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
-            <path d="M4 14 L20 4 L36 14" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
-            <rect x="14" y="22" width="12" height="14" stroke="#C9A96E" stroke-width="1.2" fill="none"/>
-            <path d="M16 8 L16 14 M20 6 L20 4 M24 8 L24 14" stroke="#E2C88A" stroke-width="0.8" opacity="0.6"/>
-          </svg>
-          <div class="logo-text">
-            <strong>MANSIÓN</strong>
-            <span>Built to Inspire</span>
-          </div>
+          <img src="Assets/logo.png" alt="MANSIÓN" class="logo-img" />
         </a>
 
         <nav>
           <ul class="nav-links">
-            <li><a href="#hero"         class="active">Home</a></li>
+            <li><a href="#hero" class="active">Home</a></li>
             <li><a href="#projects">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#footer">Contact</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#footer">Contacto</a></li>
           </ul>
         </nav>
 
@@ -1338,23 +1568,35 @@
               <span>Ver Proyectos</span>
               <i class="fa-solid fa-arrow-right"></i>
             </a>
-            <a href="#footer" class="btn-outline">Agendar Consulta</a>
           </div>
         </div>
       </div>
 
       <div class="hero-stats">
-        <div class="hero-stat">
-          <strong>15+</strong>
-          <span>Años</span>
+        <div class="hero-stats-numbers">
+          <div class="hero-stat">
+            <strong data-count="15" data-suffix="+">15+</strong>
+            <span>Años</span>
+          </div>
+          <div class="hero-stat">
+            <strong data-count="200" data-suffix="+">200+</strong>
+            <span>Proyectos</span>
+          </div>
+          <div class="hero-stat">
+            <strong data-count="98" data-suffix="%">98%</strong>
+            <span>Satisfacción</span>
+          </div>
         </div>
-        <div class="hero-stat">
-          <strong>200+</strong>
-          <span>Proyectos</span>
-        </div>
-        <div class="hero-stat">
-          <strong>98%</strong>
-          <span>Satisfacción</span>
+        <div class="hero-stats-footer">
+          <div class="hero-avatars">
+            <div class="hero-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="hero-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="hero-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="hero-avatar"><i class="fa-solid fa-user"></i></div>
+          </div>
+          <div class="hero-stats-label">
+            <strong>+25%</strong> clientes cada mes
+          </div>
         </div>
       </div>
 
@@ -1384,9 +1626,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$2.4M</span></div>
             </div>
             <p class="proj-slide-desc">Un santuario privado entre colinas donde cada espacio respira calma y elegancia. Materiales nobles, tecnología domótica integrada y jardines paisajísticos que fusionan arquitectura con naturaleza.</p>
+            <span class="proj-slide-badge">Residencial</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Residencial</span>
             <img src="Assets/pro1.png" alt="Villa Cielo Azul" />
           </div>
         </div>
@@ -1404,9 +1646,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$8.7M</span></div>
             </div>
             <p class="proj-slide-desc">Ícono corporativo de 22 pisos con fachada de vidrio templado, lobbies de doble altura y plantas flexibles certificadas LEED. Diseñado para empresas que lideran el mercado.</p>
+            <span class="proj-slide-badge">Comercial</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Comercial</span>
             <img src="Assets/pro2.png" alt="Torre Áurea" style="object-position: right center;" />
           </div>
         </div>
@@ -1424,9 +1666,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$1.8M</span></div>
             </div>
             <p class="proj-slide-desc">Integrada con su entorno natural, esta residencia emplea madera certificada, piedra local y ventanales panorámicos que invitan al bosque al interior. Sostenible por diseño, lujosa por vocación.</p>
+            <span class="proj-slide-badge">Residencial</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Residencial</span>
             <img src="Assets/pro3.png" alt="Residencia del Bosque" style="object-position: right center;" />
           </div>
         </div>
@@ -1444,9 +1686,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$15.2M</span></div>
             </div>
             <p class="proj-slide-desc">Hub empresarial de vanguardia con espacios colaborativos, salas de conferencias de alto rendimiento y amenidades de bienestar. Un entorno pensado para la productividad y la excelencia.</p>
+            <span class="proj-slide-badge">Comercial</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Comercial</span>
             <img src="Assets/pro%204.png" alt="Centro Meridian" style="object-position: right center;" />
           </div>
         </div>
@@ -1464,9 +1706,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$3.1M</span></div>
             </div>
             <p class="proj-slide-desc">La cima como obra de arte. Techos de doble altura, terraza privada con jacuzzi y vistas panorámicas a 360° sobre la ciudad. Cada detalle concebido para quienes no aceptan compromisos.</p>
+            <span class="proj-slide-badge">Residencial</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Residencial</span>
             <img src="Assets/pro5.png" alt="Penthouse Cumbres" />
           </div>
         </div>
@@ -1484,9 +1726,9 @@
               <div class="proj-slide-detail"><label>Inversión</label><span>$6.9M</span></div>
             </div>
             <p class="proj-slide-desc">32 suites donde el diseño editorial se encuentra con la hospitalidad de lujo. Gastronomía gourmet, spa de clase mundial y una identidad visual que convierte cada estancia en una experiencia memorable.</p>
+            <span class="proj-slide-badge">Hostelería</span>
           </div>
           <div class="proj-img-panel">
-            <span class="proj-slide-badge">Hostelería</span>
             <img src="Assets/pro6.png" alt="Hotel Esmeralda" style="object-position: 65% center;" />
           </div>
         </div>
@@ -1554,6 +1796,7 @@
   </section>
 
   <!-- ═══════════════════ SERVICES ═══════════════════ -->
+  <div class="services-scroll-space">
   <section id="services">
     <div class="container">
       <div class="services-header fade-up">
@@ -1563,7 +1806,7 @@
       </div>
 
       <!-- Slider 3D -->
-      <div class="services-slider-wrap">
+      <div class="services-slider-wrap fade-up" style="transition-delay:0.2s">
         <button class="svc-btn" id="svcPrev"><i class="fa-solid fa-chevron-left"></i></button>
 
         <div class="services-3d-scene">
@@ -1641,6 +1884,7 @@
 
     </div><!-- /container -->
   </section>
+  </div><!-- /services-scroll-space -->
 
   <!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
   <section id="testimonials">
@@ -1835,11 +2079,11 @@
     <!-- CTA Banner -->
     <div class="footer-cta-wrap">
       <div class="container">
-        <h2>Hagamos algo <em>extraordinario</em></h2>
-        <p>¿Tienes un proyecto en mente? Hablemos y convirtamos tu visión en realidad.</p>
-        <a href="mailto:hola@mansion.com" class="btn-gold">
+        <h2 class="fade-up">Hagamos algo <em>extraordinario</em></h2>
+        <p class="fade-up" style="transition-delay:0.15s">¿Tienes un proyecto en mente? Hablemos y convirtamos tu visión en realidad.</p>
+        <a href="mailto:hola@mansion.com" class="btn-luxury fade-up" style="transition-delay:0.3s">
           <span>Agendar una Cita</span>
-          <i class="fa-solid fa-calendar-check"></i>
+          <i class="fa-solid fa-arrow-right-long"></i>
         </a>
       </div>
     </div>
@@ -1848,28 +2092,13 @@
     <div class="container">
       <div class="footer-top">
 
-        <div class="footer-brand">
+        <div class="footer-brand fade-up">
           <a href="#hero" class="logo">
-            <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 4 L36 14 L36 36 L4 36 L4 14 Z" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
-              <path d="M4 14 L20 4 L36 14" stroke="#C9A96E" stroke-width="1.5" stroke-linejoin="round"/>
-              <rect x="14" y="22" width="12" height="14" stroke="#C9A96E" stroke-width="1.2" fill="none"/>
-            </svg>
-            <div class="logo-text">
-              <strong>MANSIÓN</strong>
-              <span>Built to Inspire</span>
-            </div>
+            <img src="Assets/logo.png" alt="MANSIÓN" class="logo-img footer-logo-anim" style="height:450px;" />
           </a>
-          <p>Construcción y diseño arquitectónico lujoso que conecta con la precisión y pasión del buen vivir.</p>
-          <div class="social-links">
-            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="#" class="social-link"><i class="fa-brands fa-pinterest-p"></i></a>
-          </div>
         </div>
 
-        <div class="footer-col">
+        <div class="footer-col fade-up" style="transition-delay:0.1s">
           <h4>Navegación</h4>
           <ul>
             <li><a href="#hero">Inicio</a></li>
@@ -1881,7 +2110,7 @@
           </ul>
         </div>
 
-        <div class="footer-col">
+        <div class="footer-col fade-up" style="transition-delay:0.2s">
           <h4>Servicios</h4>
           <ul>
             <li><a href="#services">Consultoría</a></li>
@@ -1893,7 +2122,7 @@
           </ul>
         </div>
 
-        <div class="footer-col">
+        <div class="footer-col fade-up" style="transition-delay:0.3s">
           <h4>Contacto</h4>
           <div class="contact-item">
             <i class="fa-solid fa-phone"></i>
@@ -1916,10 +2145,16 @@
       </div>
 
       <div class="footer-bottom">
-        <p>© 2025 MANSIÓN. Todos los derechos reservados.</p>
+        <p>Construcción y diseño arquitectónico lujoso que conecta con la precisión y pasión del buen vivir.</p>
+        <div class="social-links footer-social">
+          <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fa-brands fa-pinterest-p"></i></a>
+        </div>
         <div class="footer-bottom-links">
-          <a href="#">Política de Privacidad</a>
-          <a href="#">Términos de Servicio</a>
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
           <a href="#">Cookies</a>
         </div>
       </div>
@@ -1933,12 +2168,66 @@
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo({ top: 0, behavior: 'instant' });
 
-    // ── Header float ─────────────────────────────────
-    const header = document.getElementById('header');
+    // ── Custom cursor ─────────────────────────────────
+    const cursorDot  = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let   mouseX = 0, mouseY = 0;
+    let   ringX  = 0, ringY  = 0;
+    let   rafId;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    // Ring follows with smooth lag
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    const clickables = 'a, button, [role="button"], .proj-slide, .service-card, .hero-scroll, .side-nav-item, input, textarea, select, label';
+    document.querySelectorAll(clickables).forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+    document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
+    document.addEventListener('mouseleave', () => {
+      cursorDot.style.opacity  = '0';
+      cursorRing.style.opacity = '0';
+    });
+    document.addEventListener('mouseenter', () => {
+      cursorDot.style.opacity  = '1';
+      cursorRing.style.opacity = '1';
+    });
+
+    // ── Header float + auto-hide past hero ───────────
+    const header        = document.getElementById('header');
+    const headerTrigger = document.getElementById('header-trigger');
+    const heroSection   = document.getElementById('hero');
 
     window.addEventListener('scroll', () => {
+      const pastHero = window.scrollY > heroSection.offsetHeight;
       header.classList.toggle('floating', window.scrollY > window.innerHeight);
+      header.classList.toggle('header-hidden', pastHero);
+      if (!pastHero) header.classList.remove('header-peek');
     }, { passive: true });
+
+    // Aparece al acercarse arriba con el mouse
+    headerTrigger.addEventListener('mouseenter', () => {
+      if (header.classList.contains('header-hidden')) {
+        header.classList.add('header-peek');
+      }
+    });
+    header.addEventListener('mouseleave', () => {
+      header.classList.remove('header-peek');
+    });
 
     // ── Active nav link on scroll ────────────────────
     const sections = document.querySelectorAll('section[id], footer[id]');
@@ -1966,6 +2255,20 @@
       });
     }, { threshold: 0.15 });
     fadeEls.forEach(el => fadeObs.observe(el));
+
+    // ── Footer logo bounce-in ────────────────────────
+    const footerLogoEl = document.querySelector('.footer-logo-anim');
+    if (footerLogoEl) {
+      const logoObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            footerLogoEl.classList.add('bounced');
+            logoObs.unobserve(footerLogoEl);
+          }
+        });
+      }, { threshold: 0.05 });
+      logoObs.observe(footerLogoEl);
+    }
 
     // ── Services: fondo + slider 3D ──────────────────
     const servicesSection = document.getElementById('services');
@@ -2066,6 +2369,7 @@
       { sel: '.proj-slide-type',    start: 0.28, dur: 0.14 },
       { sel: '.proj-slide-details', start: 0.40, dur: 0.14 },
       { sel: '.proj-slide-desc',    start: 0.52, dur: 0.16 },
+      { sel: '.proj-slide-badge',   start: 0.66, dur: 0.14 },
     ];
 
     function resetProjText(slide) {
@@ -2111,20 +2415,29 @@
       if (!projSpace) return;
       const rect     = projSpace.getBoundingClientRect();
       const vh       = window.innerHeight;
-      const traveled = -rect.top; // px scrolled into the space
-      const total    = projSpace.offsetHeight - vh; // 600vh in px
+      const traveled = -rect.top;
+      const total    = projSpace.offsetHeight - vh;
       const progress = Math.min(Math.max(traveled / total, 0), 1);
       const idx      = Math.min(PROJ_TOTAL - 1, Math.floor(progress * PROJ_TOTAL));
       setProjectSlide(idx);
 
+      // Fade in the image panel of slide 0 as the section enters (rect.top goes 0 → -vh)
+      const firstImg = projSlides[0].querySelector('.proj-img-panel');
+      if (firstImg) {
+        const enterProgress = Math.min(Math.max(-rect.top / vh, 0), 1);
+        firstImg.style.opacity = enterProgress;
+      }
+
       // Sub-progress within current slide (0→1) — drives text reveal + image zoom
       const slideSize   = 1 / PROJ_TOTAL;
       const subProgress = Math.min(Math.max((progress - idx * slideSize) / slideSize, 0), 1);
-      animateProjText(projSlides[idx], subProgress);
+      // Text reveals in first 55% — pause holds content visible
+      const animSub = Math.min(subProgress / 0.55, 1);
+      animateProjText(projSlides[idx], animSub);
 
-      // Subtle zoom in toward center as slide progresses
+      // Zoom continues through the full slide including the pause
       const img = projSlides[idx].querySelector('.proj-img-panel img');
-      if (img) img.style.transform = `scale(${1 + subProgress * 0.06})`;
+      if (img) img.style.transform = `scale(${1 + subProgress * 0.10})`;
     }
 
     window.addEventListener('scroll', updateProjectScroll, { passive: true });
@@ -2144,7 +2457,7 @@
       span.className = 'intro-char';
       span.textContent = ch;
       introWordEl.appendChild(span);
-      setTimeout(() => { span.style.opacity = '1'; }, 300 + i * 135);
+      setTimeout(() => { span.style.opacity = '1'; }, 225 + i * 101);
     });
 
     function updateIntro() {
@@ -2178,6 +2491,45 @@
 
     window.addEventListener('scroll', updateIntro, { passive: true });
     updateIntro();
+
+    // ── Services scroll space: add pause height so sticky holds for ~2s of scroll ──
+    const servicesEl   = document.getElementById('services');
+    const servicesWrap = servicesEl ? servicesEl.closest('.services-scroll-space') : null;
+    if (servicesWrap && servicesEl) {
+      // Extra scroll needed = services natural height (already 100vh) + 80vh pause
+      const extra = window.innerHeight * 0.8;
+      servicesWrap.style.height = (servicesEl.offsetHeight + extra) + 'px';
+    }
+
+    // ── Section progress bar ──────────────────────────────
+    const progressBar = document.getElementById('section-progress');
+    const progressSections = ['hero','projects']
+      .map(id => document.getElementById(id)).filter(Boolean);
+
+    function updateSectionProgress() {
+      const scrollY = window.scrollY;
+      let pct = 0;
+      let found = false;
+      for (const sec of progressSections) {
+        // For services: track the wrapper (includes pause space)
+        const trackEl = sec.id === 'services' && servicesWrap ? servicesWrap : sec;
+        const top     = trackEl.offsetTop;
+        const height  = trackEl.offsetHeight;
+        // For hero: use sticky travel so bar = 100% when hero unsticks
+        const inner   = sec.querySelector('.hero-inner');
+        const range   = inner ? sec.offsetHeight - window.innerHeight : height;
+        if (scrollY >= top && scrollY < top + height) {
+          pct = ((scrollY - top) / range) * 100;
+          found = true;
+          break;
+        }
+      }
+      progressBar.style.opacity = found ? '1' : '0';
+      progressBar.style.width = Math.min(Math.max(pct, 0), 100) + '%';
+    }
+
+    window.addEventListener('scroll', updateSectionProgress, { passive: true });
+    updateSectionProgress();
 
     // ── Experience banner — scroll-driven typewriter + counters ──
     const expScrollSpace = document.getElementById('expScrollSpace');
@@ -2217,8 +2569,21 @@
     function updateExpScroll() {
       if (!expScrollSpace) return;
       const rect     = expScrollSpace.getBoundingClientRect();
-      const total    = expScrollSpace.offsetHeight - window.innerHeight;
+      const vh       = window.innerHeight;
+      const total    = expScrollSpace.offsetHeight - vh;
       const progress = Math.min(Math.max(-rect.top / total, 0), 1);
+
+      // Push: as exp banner rises from below, last project slides up and fades
+      // rect.top goes from vh (just entered) to 0 (fully at top)
+      const pushP    = Math.min(Math.max(1 - rect.top / vh, 0), 1);
+      const expBannerEl = document.getElementById('expBanner');
+      if (projSticky) {
+        projSticky.style.transform = `translateY(${-pushP * 80}px)`;
+        projSticky.style.opacity   = String(Math.max(1 - pushP * 2, 0));
+      }
+      if (expBannerEl) {
+        expBannerEl.style.transform = `translateY(${(1 - pushP) * 60}px)`;
+      }
 
       // Phase 1 (0→65%): reveal words one by one
       const wordPhase   = Math.min(progress / 0.65, 1);
